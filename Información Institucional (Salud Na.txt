@@ -1,0 +1,94 @@
+"""Script para auditar logs generales de sistema en un VPS.
+
+Revisa el historial de accesos SSH, intentos fallidos de fuerza bruta, configuración
+de tareas programadas (cron), llaves autorizadas en root y eventos de falta de memoria (OOM Killer).
+
+Configuracion requerida en .env:
+- VPS_HOST: IP o hostname del servidor
+- VPS_USER: Usuario SSH (ej: root)
+- VPS_PASSWORD: Contrasena SSH
+"""
+
+import os
+import sys
+
+import paramiko
+from dotenv import load_dotenv
+
+def get_vps_credentials():
+    """Obtiene credenciales SSH desde variables de entorno."""
+    load_dotenv()
+    
+    host = os.getenv('VPS_HOST')
+    username = os.getenv('VPS_USER', 'root')
+    password = os.getenv('VPS_PASSWORD')
+    
+    if not host or not password:
+        print("Error: Variables de entorno no configuradas.")
+        print("Por favor, define en tu archivo .env:")
+        print("  VPS_HOST=147.79.74.42")
+        print("  VPS_USER=root")
+        print("  VPS_PASSWORD=tu_contrasena")
+        sys.exit(1)
+    
+    return host, username, password
+
+
+def run_logs_audit():
+    """Conecta por SSH y analiza logs del sistema base para detectar vulnerabilidades o accesos indeseados."""
+    host, username, password = get_vps_credentials()
+    
+    client = paramiko.SSHClient()
+    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    
+    try:
+        print(f"Conectando a {host}...")
+        client.connect(hostname=host, username=username, password=password, timeout=15)
+        print("Conexión SSH exitosa.")
+        
+        # 1. SSH keys
+        print("\n=== [1] Llaves SSH Autorizadas (Root) ===")
+        stdin, stdout, stderr = client.exec_command("cat /root/.ssh/authorized_keys 2>/dev/null")
+        keys = stdout.read().decode('utf-8', errors='ignore').strip()
+        if keys:
+            for i, line in enumerate(keys.split('\n'), 1):
+                if line.strip() and not line.startswith('#'):
+                    parts = line.split()
+                    print(f"Llave {i}: Tipo={parts[0] if parts else '?'}, Comentario={parts[-1] if len(parts)>2 else 'Ninguno'}")
+        else:
+            print("No hay llaves configuradas en authorized_keys.")
+            
+        # 2. Cron jobs
+        print("\n=== [2] Crontab de Root y Persistencia ===")
+        stdin, stdout, stderr = client.exec_command("crontab -l 2>/dev/null")
+        crontab = stdout.read().decode('utf-8', errors='ignore').strip()
+        print(crontab if crontab else "Sin crontab configurada para root.")
+        
+        # 3. Logins exitosos
+        print("\n=== [3] Logins SSH Exitosos Recientes ===")
+        stdin, stdout, stderr = client.exec_command("last -n 10")
+        print(stdout.read().decode('utf-8', errors='ignore').strip())
+        
+        # 4. Intentos fallidos SSH
+        print("\n=== [4] Fuerza Bruta SSH (IPs fallidas - Top 5) ===")
+        journal_ssh = "journalctl -u ssh.service -u sshd.service --since '7 days ago' 2>/dev/null | grep -oE 'Failed password for .* from [0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+' | awk '{print $NF}' | sort | uniq -c | sort -nr | head -n 5"
+        stdin, stdout, stderr = client.exec_command(journal_ssh)
+        failed_ssh = stdout.read().decode('utf-8', errors='ignore').strip()
+        print("Intentos | IP")
+        print(failed_ssh if failed_ssh else "No hay intentos fallidos de SSH recientes.")
+        
+        # 5. OOM Killer
+        print("\n=== [5] Registro de OOM Killer (Falta de memoria en Kernel) ===")
+        oom_cmd = "journalctl -k --since '3 days ago' 2>/dev/null | grep -Ei 'oom-killer|kill process|out of memory' | tail -n 5"
+        stdin, stdout, stderr = client.exec_command(oom_cmd)
+        oom_logs = stdout.read().decode('utf-8', errors='ignore').strip()
+        print(oom_logs if oom_logs else "No se encontraron procesos matados por falta de memoria en los últimos 3 días.")
+        
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        client.close()
+        print("\nConexión SSH cerrada.")
+
+if __name__ == "__main__":
+    run_logs_audit()

@@ -1,0 +1,121 @@
+"""Script para auditar en profundidad contenedores Docker de WordPress en un VPS.
+
+Este script automatiza el escaneo de seguridad en servidores que corren WordPress
+sobre contenedores Docker. Busca de forma autónoma:
+1. Binarios ejecutables (ELF) en directorios temporales `/tmp` (minadores).
+2. Archivos PHP maliciosos ocultos o sospechosos dentro de `/wp-content/uploads/`.
+3. Estructuras de plugins sospechosas de contener backdoors.
+
+Configuracion requerida en .env:
+- VPS_HOST: IP o hostname del servidor
+- VPS_USER: Usuario SSH (ej: root)
+- VPS_PASSWORD: Contrasena SSH
+"""
+
+import os
+import sys
+
+import paramiko
+from dotenv import load_dotenv
+
+def get_vps_credentials():
+    """Obtiene credenciales SSH desde variables de entorno."""
+    load_dotenv()
+    
+    host = os.getenv('VPS_HOST')
+    username = os.getenv('VPS_USER', 'root')
+    password = os.getenv('VPS_PASSWORD')
+    
+    if not host or not password:
+        print("Error: Variables de entorno no configuradas.")
+        print("Por favor, define en tu archivo .env:")
+        print("  VPS_HOST=147.79.74.42")
+        print("  VPS_USER=root")
+        print("  VPS_PASSWORD=tu_contrasena")
+        sys.exit(1)
+    
+    return host, username, password
+
+
+def run_remote_scan():
+    """Se conecta al VPS remoto e inspecciona todos los contenedores WordPress activos."""
+    host, username, password = get_vps_credentials()
+    
+    client = paramiko.SSHClient()
+    client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    
+    try:
+        print(f"Conectando a {host}...")
+        client.connect(hostname=host, username=username, password=password, timeout=15)
+        print("Conexión SSH exitosa.")
+        
+        # 1. Obtener contenedores Docker de WordPress activos
+        print("\n=== Identificando contenedores WordPress en ejecución ===")
+        cmd_get_wp = "docker ps --filter 'name=wordpress-' --format '{{.Names}}'"
+        stdin, stdout, stderr = client.exec_command(cmd_get_wp)
+        containers = stdout.read().decode('utf-8', errors='ignore').strip().split('\n')
+        containers = [c.strip() for c in containers if c.strip()]
+        
+        if not containers:
+            print("No se encontraron contenedores activos con el prefijo 'wordpress-'.")
+            return
+            
+        print(f"Se detectaron {len(containers)} contenedor(es): {', '.join(containers)}")
+        
+        # 2. Auditar cada contenedor
+        for container in containers:
+            print("\n" + "=" * 60)
+            print(f"AUDITANDO CONTENEDOR: {container}")
+            print("=" * 60)
+            
+            # A. Buscar binarios ELF sospechosos en /tmp del contenedor
+            print("\n[A] Buscando archivos ELF (binarios ejecutables) en /tmp...")
+            cmd_elf = (
+                f"docker exec {container} find /tmp -type f -exec file {{}} \\; 2>/dev/null "
+                f"| grep -E 'ELF|executable'"
+            )
+            stdin, stdout, stderr = client.exec_command(cmd_elf)
+            elf_files = stdout.read().decode('utf-8', errors='ignore').strip()
+            if elf_files:
+                print(f"⚠️ ¡ATENCIÓN! Se encontraron ejecutables sospechosos:\n{elf_files}")
+            else:
+                print("✓ No se detectaron binarios ELF en /tmp.")
+                
+            # B. Buscar archivos PHP dentro del directorio de uploads
+            print("\n[B] Buscando scripts PHP en /wp-content/uploads/...")
+            # Los directorios de uploads no deberían tener scripts PHP que se puedan ejecutar.
+            cmd_php_uploads = (
+                f"docker exec {container} find /var/www/html/wp-content/uploads -type f -name '*.php' 2>/dev/null "
+                f"| xargs ls -la 2>/dev/null"
+            )
+            stdin, stdout, stderr = client.exec_command(cmd_php_uploads)
+            php_files = stdout.read().decode('utf-8', errors='ignore').strip()
+            if php_files:
+                print(f"⚠️ ¡ATENCIÓN! Archivos PHP encontrados en uploads:\n{php_files}")
+            else:
+                print("✓ No se detectaron archivos PHP en el directorio de subidas (uploads).")
+                
+            # C. Comprobar plugins instalados y su legitimidad básica
+            print("\n[C] Listando estructura de plugins para detectar nombres extraños...")
+            cmd_plugins = f"docker exec {container} ls -la /var/www/html/wp-content/plugins/ 2>/dev/null"
+            stdin, stdout, stderr = client.exec_command(cmd_plugins)
+            plugins_list = stdout.read().decode('utf-8', errors='ignore').strip()
+            
+            if plugins_list:
+                print("Directorio /wp-content/plugins/:")
+                # Filtramos para mostrar solo directorios
+                lines = [l for l in plugins_list.split('\n') if l.startswith('d') or 'drwxr' in l]
+                for l in lines:
+                    if not l.endswith('.') and not l.endswith('..'):
+                        print(f"  - {l.split()[-1]}")
+            else:
+                print("No se pudo leer el directorio de plugins.")
+                
+    except Exception as e:
+        print(f"Error: {e}")
+    finally:
+        client.close()
+        print("\nConexión SSH cerrada.")
+
+if __name__ == "__main__":
+    run_remote_scan()
