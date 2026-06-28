@@ -119,19 +119,53 @@ uvicorn app.main:app --reload --port 8000</code>
             <div class="paso-numero">6</div>
             <div class="paso-contenido">
                 <h3>Hacer un cambio</h3>
-                <p>Ahora viene lo divertido. Hacé un cambio en el proyecto. Algunas ideas:</p>
+                <p>Ahora viene lo divertido. Elegí uno o varios cambios de la lista según tu nivel. Podés pedirle a cualquier IA que te ayude: describile lo que querés en lenguaje natural y te va a guiar.</p>
+
+                <h4 style="color: #2d5016; margin: 1.2rem 0 0.5rem; font-size: 1rem;">🟢 Nivel principiante — sin tocar código</h4>
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 0.5rem;">Ideal para arrancar. Usás el admin del sitio, no hace falta editar archivos.</p>
                 <ul>
-                    <li>🌱 <strong>Agregar un remedio nuevo</strong> desde el admin (<code>/admin/remedios</code>)</li>
-                    <li>🎨 <strong>Cambiar un color o estilo</strong> en <code>app/static/css/styles.css</code></li>
-                    <li>✏️ <strong>Modificar un texto</strong> en <code>app/templates/index.html</code></li>
-                    <li>🔧 <strong>Agregar un campo nuevo</strong> a una tabla en <code>app/database.py</code></li>
+                    <li><strong>Agregar un remedio nuevo</strong> desde el panel de administración (<code>/admin/remedios</code>) — inventá una hierba o buscá una real</li>
+                    <li><strong>Editar un remedio existente</strong> — corregí una propiedad, agregá una contraindicación</li>
+                    <li><strong>Agregar un usuario de prueba</strong> desde <code>/admin/usuarios</code></li>
                 </ul>
+
+                <h4 style="color: #2d5016; margin: 1.2rem 0 0.5rem; font-size: 1rem;">🟡 Nivel intermedio — cambios visuales</h4>
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 0.5rem;">Editás archivos de estilo o plantillas HTML. Cambios visibles de inmediato.</p>
+                <ul>
+                    <li><strong>Cambiar un color</strong> — modificá el color del header, del fondo o de los botones en <code>app/static/css/style.css</code></li>
+                    <li><strong>Cambiar un texto</strong> — modificá el título, el subtítulo o la cita en <code>app/templates/index.html</code></li>
+                    <li><strong>Cambiar la tipografía</strong> — probá otra fuente de Google Fonts en el CSS</li>
+                    <li><strong>Agregar un enlace al menú de navegación</strong> — por ejemplo, un link a <code>/taller</code> o a <code>/grimorio</code></li>
+                    <li><strong>Modificar el footer</strong> — agregá un texto, un link o cambiá el copyright</li>
+                </ul>
+
+                <h4 style="color: #2d5016; margin: 1.2rem 0 0.5rem; font-size: 1rem;">🟠 Nivel avanzado — cambios funcionales</h4>
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 0.5rem;">Tocás el backend (Python) o agregás funcionalidad nueva.</p>
+                <ul>
+                    <li><strong>Agregar un campo nuevo a la tabla de remedios</strong> — por ejemplo, "origen geográfico" o "método de preparación" en <code>app/database.py</code> y <code>app/models.py</code></li>
+                    <li><strong>Crear un endpoint nuevo en la API</strong> — por ejemplo, <code>/api/remedios/buscar?q=menta</code> en <code>app/main.py</code></li>
+                    <li><strong>Agregar un buscador de remedios</strong> en la página principal con JavaScript</li>
+                    <li><strong>Hacer que el formulario de contacto envíe un mail real</strong> usando smtplib</li>
+                    <li><strong>Agregar una página nueva</strong> — por ejemplo, <code>/acerca</code> con la historia de Salud Natura</li>
+                </ul>
+
+                <h4 style="color: #2d5016; margin: 1.2rem 0 0.5rem; font-size: 1rem;">🔴 Nivel experto — desafíos</h4>
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 0.5rem;">Para los que quieran ir más allá. Requieren pensar la arquitectura.</p>
+                <ul>
+                    <li><strong>Agregar autenticación al admin</strong> — proteger <code>/admin</code> con usuario y contraseña</li>
+                    <li><strong>Implementar la tabla de productos afiliados</strong> (<code>CATALOGO_PRODUCTOS_EXTERNAL</code>) con su ABM</li>
+                    <li><strong>Agregar geolocalización</strong> — que el usuario pueda ver la franquicia más cercana con la fórmula de Haversine</li>
+                    <li><strong>Crear un sistema de favoritos</strong> — que un usuario pueda marcar remedios como favoritos</li>
+                    <li><strong>Integrar WhatsApp</strong> — botón que arme un mensaje pre-armado con el remedio seleccionado</li>
+                </ul>
+
                 <div class="tip">
-                    <strong>💡 Tip con Claude Code:</strong> Pedile lo que quieras cambiar en lenguaje natural. Por ejemplo:
+                    <strong>💡 Tip:</strong> Pedile a tu IA asistente lo que quieras cambiar en lenguaje natural. Por ejemplo:
                     <ul>
-                        <li><em>"Cambiá el color del header a azul"</em></li>
-                        <li><em>"Agregá un footer con links a redes sociales"</em></li>
-                        <li><em>"Agregá un buscador de remedios"</em></li>
+                        <li><em>"Cambiá el color del header a azul oscuro"</em></li>
+                        <li><em>"Agregá un buscador que filtre remedios por nombre"</em></li>
+                        <li><em>"Creá una página /acerca con información del proyecto"</em></li>
+                        <li><em>"Agregá un campo 'origen' a la tabla de remedios y mostralo en el grimorio"</em></li>
                     </ul>
                 </div>
             </div>
