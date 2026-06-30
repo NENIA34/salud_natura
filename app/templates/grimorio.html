@@ -593,15 +593,15 @@ html,body{height:100%;font-family:'Lato',sans-serif;background:var(--verde);over
 .jugo-view-meta{padding:.9rem 1rem;flex:1}
 .jugo-view-tag{font-family:'Cinzel',serif;font-size:.52rem;letter-spacing:3px;text-transform:uppercase;color:#b8924a;margin:0 0 .3rem}
 .jugo-view-nombre{font-family:'EB Garamond',serif;font-style:italic;font-size:1.05rem;color:rgba(232,224,208,.92);line-height:1.4;margin:0 0 .5rem}
-.jugo-view-ayuda{font-style:italic;font-size:.8rem;color:#4a2800;line-height:1.6;margin:0}
-.jugo-view-right{flex:1;background:#f5edcf;overflow-y:auto;padding:1.2rem 1.3rem}
+.jugo-view-ayuda{font-style:italic;font-size:.8rem;color:rgba(232,224,208,.75);line-height:1.6;margin:0}
+.jugo-view-right{flex:1;background:#0d1810;overflow-y:auto;padding:1.2rem 1.3rem}
 .jugo-view-sec{font-family:'Cinzel',serif;font-size:.5rem;letter-spacing:3px;text-transform:uppercase;color:#b8924a;margin:1rem 0 .3rem;border-bottom:1px solid rgba(184,146,74,.3);padding-bottom:.3rem}
 .jugo-view-sec:first-child{margin-top:0}
 .jugo-view-ing{list-style:none;padding:0;margin:0 0 .5rem}
 .jugo-view-ing li{font-style:italic;font-size:.82rem;color:rgba(232,224,208,.82);padding:2px 0;padding-left:.9rem;position:relative}
 .jugo-view-ing li::before{content:'✦';position:absolute;left:0;color:#b8924a;font-size:.5rem;top:.35rem}
 .jugo-view-pasos{padding-left:1.2rem;margin:0}
-.jugo-view-pasos li{font-style:italic;font-size:.82rem;color:rgba(232,224,208,.82);line-height:1.65;padding:3px 0;border-bottom:1px solid rgba(212,175,55,.06)}
+.jugo-view-pasos li{font-style:italic;font-size:.82rem;color:rgba(232,224,208,.82);line-height:1.65;padding:3px 0;border-bottom:1px solid rgba(212,175,55,.08)}
 .jugo-view-pasos li:last-child{border-bottom:none}
 .nav-btn-idx{
   width:auto;padding:0 1rem;border-radius:3px;
@@ -727,6 +727,27 @@ html,body{height:100%;font-family:'Lato',sans-serif;background:var(--verde);over
   .idx-title { color: #2a1400 !important; }
   .idx-field-label { color: #8a6010 !important; }
   .page-right::before { display: none !important; }
+
+  /* ── Jugos e Infusiones al imprimir ── */
+  #jugoView:not(.hidden), #infusionView:not(.hidden) { display: flex !important; }
+  #jugoView.hidden, #infusionView.hidden { display: none !important; }
+  .jugo-view-left { background: #fff !important; border-right: 1px solid #ccc !important; }
+  .jugo-view-right { background: #fff !important; }
+  .jugo-view-nombre { color: #2a1400 !important; }
+  .jugo-view-tag { color: #8a6010 !important; }
+  .jugo-view-ayuda { color: #5a3000 !important; }
+  .jugo-view-sec { color: #8a6010 !important; border-bottom-color: #b8924a !important; }
+  .jugo-view-ing li { color: #1a0e00 !important; }
+  .jugo-view-ing li::before { color: #b8924a !important; }
+  .jugo-view-pasos li { color: #1a0e00 !important; border-bottom-color: rgba(184,146,74,.2) !important; }
+  .jugo-panel { background: #fff !important; border-color: #b8924a !important; }
+  .jugo-panel-nombre { color: #2a1400 !important; }
+  .jugo-panel-ayuda { color: #5a3000 !important; background: rgba(184,146,74,.06) !important; }
+  .jugo-ing-title { color: #8a6010 !important; }
+  .jugo-ing-list li { color: #1a0e00 !important; }
+  .jugo-prep-list li { color: #1a0e00 !important; }
+  .jugo-toggle-btn, .jugo-prep-btn { display: none !important; }
+  .jugo-prep-list { display: block !important; }
 }
 </style>
 </head>
@@ -813,13 +834,13 @@ html,body{height:100%;font-family:'Lato',sans-serif;background:var(--verde);over
 
 <div class="topbar">
   <a href="javascript:void(0)" class="topbar-logo" onclick="cerrarLibro()">
-    <img src="logo.jpg" alt="Logo"/>
+    <img src="/static/img/logo.jpg" alt="Logo"/>
     <span>Salud Natura</span>
   </a>
   <div id="topbarAuth">
     <button class="topbar-register" onclick="abrirModal()">✦ Registrarse</button>
   </div>
-  <a href="index.html" class="btn-back">← Volver</a>
+  <a href="/" class="btn-back">← Volver</a>
 </div>
 
 <div class="scene">
@@ -838,7 +859,7 @@ html,body{height:100%;font-family:'Lato',sans-serif;background:var(--verde);over
 
       <div class="cover-inner">
         <div class="cover-medallion">
-          <img src="logo.jpg" alt="Logo Salud Natura"/>
+          <img src="/static/img/logo.jpg" alt="Logo Salud Natura"/>
         </div>
         <div class="cover-divider"></div>
         <h1>Grimorio<br>Salud Natura</h1>
@@ -990,6 +1011,10 @@ html,body{height:100%;font-family:'Lato',sans-serif;background:var(--verde);over
           <ul class="jugo-view-ing" id="jugoViewIng"></ul>
           <p class="jugo-view-sec">Preparación paso a paso</p>
           <ol class="jugo-view-pasos" id="jugoViewPasos"></ol>
+          <button class="btn-print" onclick="if(!getUsuario()){abrirModal()}else{window.print()}" style="margin-top:1rem">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Imprimir / Guardar ficha
+          </button>
         </div>
       </div><!-- /jugoView -->
 
@@ -1009,6 +1034,10 @@ html,body{height:100%;font-family:'Lato',sans-serif;background:var(--verde);over
           <ul class="jugo-view-ing" id="infusionViewIng"></ul>
           <p class="jugo-view-sec">Preparación paso a paso</p>
           <ol class="jugo-view-pasos" id="infusionViewPasos"></ol>
+          <button class="btn-print" onclick="if(!getUsuario()){abrirModal()}else{window.print()}" style="margin-top:1rem">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+            Imprimir / Guardar ficha
+          </button>
         </div>
       </div><!-- /infusionView -->
 
@@ -1035,7 +1064,7 @@ const _hierbasFallback = [
   {
     nombre:"Manzanilla", lat:"Matricaria chamomilla",
     lote:"Lote I", loteDesc:"Lote I · Hierbas suaves",
-    img:"img/manzanilla.jpg",
+    img:"/static/img/manzanilla.jpg",
     props:["Antiinflamatoria","Sedante suave","Digestiva","Antibacteriana","Antiespasmódica"],
     usos:"Alivia insomnio y nerviosismo, calma cólicos y gastritis. Aplicada en piel reduce rojeces e irritaciones. En infusión es el remedio estrella para noches inquietas y malestares digestivos.",
     nota:"La infusión debe reposar tapada 10 min para conservar sus aceites esenciales.",
@@ -1044,7 +1073,7 @@ const _hierbasFallback = [
   {
     nombre:"Menta", lat:"Mentha × piperita",
     lote:"Lote I", loteDesc:"Lote I · Hierbas suaves",
-    img:"img/menta.jpg",
+    img:"/static/img/menta.jpg",
     props:["Digestiva","Analgésica","Refrescante","Antiespasmódica","Descongestionante"],
     usos:"Reduce náuseas, flatulencias y espasmos intestinales. El mentol actúa sobre cefaleas tensionales aplicado en sienes. Inhalada despeja vías respiratorias en resfríos.",
     nota:"Evitar en niños menores de 2 años. No usar aceite esencial puro sin diluir.",
@@ -1053,7 +1082,7 @@ const _hierbasFallback = [
   {
     nombre:"Lavanda", lat:"Lavandula angustifolia",
     lote:"Lote I", loteDesc:"Lote I · Hierbas suaves",
-    img:"img/lavanda.jpg",
+    img:"/static/img/lavanda.jpg",
     props:["Ansiolítica","Sedante","Antifúngica","Cicatrizante","Analgésica"],
     usos:"Reduce ansiedad e insomnio mediante aromaterapia o infusión. Aplicada en piel acelera cicatrización de quemaduras leves y heridas. Reconocida en medicina integrativa por su acción sobre el sistema nervioso.",
     nota:"El aceite esencial de lavanda es uno de los pocos que puede aplicarse puro en pequeñas áreas.",
@@ -1062,7 +1091,7 @@ const _hierbasFallback = [
   {
     nombre:"Romero", lat:"Salvia rosmarinus",
     lote:"Lote II", loteDesc:"Lote II · Hierbas energizantes",
-    img:"img/romero.jpg",
+    img:"/static/img/romero.jpg",
     props:["Estimulante circulatorio","Antioxidante","Antibacteriano","Hepatoprotector","Nootrópico suave"],
     usos:"Mejora la memoria y concentración estimulando el flujo cerebral. En fricciones capilar combate la alopecia androgenética. Protege el hígado y activa la secreción biliar.",
     nota:"Contraindicado en embarazo en dosis terapéuticas elevadas. No usar en epilepsia.",
@@ -1071,7 +1100,7 @@ const _hierbasFallback = [
   {
     nombre:"Cúrcuma", lat:"Curcuma longa",
     lote:"Lote II", loteDesc:"Lote II · Hierbas energizantes",
-    img:"img/curcuma.jpg",
+    img:"/static/img/curcuma.jpg",
     props:["Antiinflamatoria potente","Antioxidante","Hepatoprotectora","Anticancerígena","Inmunomoduladora"],
     usos:"La curcumina bloquea las mismas rutas inflamatorias que antiinflamatorios de síntesis. Indicada en artritis, enfermedades autoinmunes y protección hepática. Su biodisponibilidad aumenta 20× con pimienta negra.",
     nota:"Absorción máxima combinada con pimienta negra (piperina) y grasas saludables.",
@@ -1080,7 +1109,7 @@ const _hierbasFallback = [
   {
     nombre:"Jengibre", lat:"Zingiber officinale",
     lote:"Lote II", loteDesc:"Lote II · Hierbas energizantes",
-    img:"img/jengibre.jpg",
+    img:"/static/img/jengibre.jpg",
     props:["Antiemético","Antiinflamatorio","Termogénico","Digestivo","Circulatorio"],
     usos:"Antiemético más estudiado en náuseas del embarazo y quimioterapia. Activa la circulación periférica y reduce dolor muscular postesfuerzo. Potencia el sistema inmune en procesos infecciosos.",
     nota:"En personas con anticoagulantes, consultar al médico antes de usar en dosis altas.",
@@ -1089,7 +1118,7 @@ const _hierbasFallback = [
   {
     nombre:"Eucalipto", lat:"Eucalyptus globulus",
     lote:"Lote III", loteDesc:"Lote III · Hierbas respiratorias",
-    img:"img/eucalipto.jpg",
+    img:"/static/img/eucalipto.jpg",
     props:["Expectorante","Antiséptico","Broncodilatador","Antibacteriano","Febrífugo"],
     usos:"El 1,8-cineol (eucaliptol) fluidifica el moco y dilata bronquios. Fundamental en gripe, bronquitis y sinusitis. En vaporizaciones libera las vías aéreas en minutos.",
     nota:"No usar aceite esencial internamente. Evitar en niños menores de 6 años sin supervisión.",
@@ -1098,7 +1127,7 @@ const _hierbasFallback = [
   {
     nombre:"Valeriana", lat:"Valeriana officinalis",
     lote:"Lote III", loteDesc:"Lote III · Hierbas respiratorias",
-    img:"img/valeriana.jpg",
+    img:"/static/img/valeriana.jpg",
     props:["Sedante","Ansiolítica","Antiespasmódica","Hipnótica","Miorelajante"],
     usos:"Reduce la latencia de sueño sin generar dependencia. Ideal para insomnio de conciliación y ansiedad moderada. En contracturas musculares actúa como relajante natural.",
     nota:"El efecto sedante se potencia con alcohol. Evitar conducir tras su consumo en dosis altas.",
@@ -1107,7 +1136,7 @@ const _hierbasFallback = [
   {
     nombre:"Cola de Caballo", lat:"Equisetum arvense",
     lote:"Lote III", loteDesc:"Lote III · Hierbas respiratorias",
-    img:"img/cola_caballo.jpg",
+    img:"/static/img/cola_caballo.jpg",
     props:["Diurética","Remineralizante","Cicatrizante","Antiinflamatoria","Hemostática"],
     usos:"Rica en sílice orgánico, refuerza huesos, uñas y cabello. Excelente diurético natural para retención de líquidos e infecciones urinarias. Favorece la regeneración de tejido conectivo.",
     nota:"No usar en insuficiencia renal. Tomar con abundante agua. Máximo 6 semanas continuas.",
@@ -1116,7 +1145,7 @@ const _hierbasFallback = [
   {
     nombre:"Caléndula", lat:"Calendula officinalis",
     lote:"Lote IV", loteDesc:"Lote IV · Hierbas reparadoras",
-    img:"img/calendula.jpg",
+    img:"/static/img/calendula.jpg",
     props:["Cicatrizante","Antiinflamatoria","Antifúngica","Emoliente","Antibacteriana"],
     usos:"Acelera la cicatrización de heridas, quemaduras y ulceraciones. Trata dermatitis atópica, eccemas y eritemas del pañal. En uso interno alivia gastritis y úlceras gástricas.",
     nota:"Una de las plantas más seguras. Raramente produce dermatitis de contacto en alérgicos a asteráceas.",
@@ -1125,7 +1154,7 @@ const _hierbasFallback = [
   {
     nombre:"Tomillo", lat:"Thymus vulgaris",
     lote:"Lote IV", loteDesc:"Lote IV · Hierbas reparadoras",
-    img:"img/tomillo.jpg",
+    img:"/static/img/tomillo.jpg",
     props:["Antibacteriano","Expectorante","Antifúngico","Antioxidante","Antiviral"],
     usos:"El timol es uno de los antisépticos naturales más potentes. Trata tos, bronquitis y laringitis con eficacia comparable a algunos mucolíticos. Preserva alimentos por sus propiedades antimicrobianas.",
     nota:"Rico en hierro y vitamina C. En dosis terapéuticas altas puede irritar la mucosa digestiva.",
@@ -1134,7 +1163,7 @@ const _hierbasFallback = [
   {
     nombre:"Pasiflora", lat:"Passiflora incarnata",
     lote:"Lote IV", loteDesc:"Lote IV · Hierbas reparadoras",
-    img:"img/pasiflora.jpg",
+    img:"/static/img/pasiflora.jpg",
     props:["Sedante","Ansiolítica","Antiespasmódica","Hipnótica","Analgésica"],
     usos:"Actúa sobre los receptores GABA reduciendo ansiedad sin somnolencia excesiva. Muy eficaz en insomnio de mantenimiento (despertares nocturnos). Alivia palpitaciones de origen nervioso.",
     nota:"Compatible con valeriana para potenciar el efecto. Evitar combinación con benzodiacepinas.",
@@ -1143,7 +1172,7 @@ const _hierbasFallback = [
   {
     nombre:"Diente de León", lat:"Taraxacum officinale",
     lote:"Lote V", loteDesc:"Lote V · Hierbas depurativas",
-    img:"img/diente_leon.jpg",
+    img:"/static/img/diente_leon.jpg",
     props:["Diurético","Depurativo","Digestivo","Hepatoprotector","Prebiótico"],
     usos:"Estimula la producción de bilis y mejora la digestión de grasas. Depurativo hepático excepcional, rico en inulina (prebiótico). Las hojas son ricas en vitaminas A, C y K.",
     nota:"El diente de león recoge contaminantes del suelo. Recolectar solo en zonas limpias.",
@@ -1152,7 +1181,7 @@ const _hierbasFallback = [
   {
     nombre:"Boldo", lat:"Peumus boldus",
     lote:"Lote V", loteDesc:"Lote V · Hierbas depurativas",
-    img:"img/boldo.jpg",
+    img:"/static/img/boldo.jpg",
     props:["Hepatoprotector","Colerético","Digestivo","Antioxidante","Laxante suave"],
     usos:"La boldina estimula la secreción y expulsión de bilis, indicada en cálculos biliares y hígado perezoso. Endémico de Chile y Argentina, es el hepatoprotector más usado en Latinoamérica.",
     nota:"Contraindicado en obstrucción de vías biliares. No usar más de 4 semanas seguidas.",
@@ -1161,7 +1190,7 @@ const _hierbasFallback = [
   {
     nombre:"Ortiga", lat:"Urtica dioica",
     lote:"Lote V", loteDesc:"Lote V · Hierbas depurativas",
-    img:"img/ortiga.jpg",
+    img:"/static/img/ortiga.jpg",
     props:["Diurética","Antiinflamatoria","Remineralizante","Depurativa","Antihistamínica"],
     usos:"La cocción elimina el ácido úrico y es aliada en gota y artritis. Extraordinariamente nutritiva: hierro, calcio, magnesio, vitaminas A y C. Uso tópico en alopecia androgenética.",
     nota:"Cocida o seca pierde el poder urticante. Las semillas son adaptógenas y energizantes.",
@@ -1170,7 +1199,7 @@ const _hierbasFallback = [
   {
     nombre:"Salvia", lat:"Salvia officinalis",
     lote:"Lote VI", loteDesc:"Lote VI · Hierbas femeninas",
-    img:"img/salvia.jpg",
+    img:"/static/img/salvia.jpg",
     props:["Antisudorífica","Antimicrobiana","Estrogénica leve","Digestiva","Neuroprotectora"],
     usos:"La planta de la menopausia por excelencia: reduce sofocos y sudoración nocturna. Antiséptico oral potente en gingivitis y aftas. Estudios muestran mejora en memoria y Alzheimer leve.",
     nota:"Evitar en embarazo y lactancia por su contenido en tujona. No superar 15 g/día de hoja seca.",
@@ -1179,7 +1208,7 @@ const _hierbasFallback = [
   {
     nombre:"Anís Verde", lat:"Pimpinella anisum",
     lote:"Lote VI", loteDesc:"Lote VI · Hierbas femeninas",
-    img:"img/anis.jpg",
+    img:"/static/img/anis.jpg",
     props:["Carminativo","Espasmolítico","Expectorante","Galactagogo","Estrogénico suave"],
     usos:"Alivia gases, meteorismo y cólicos intestinales. Estimula la producción de leche materna. En afecciones respiratorias actúa como expectorante suave que facilita la eliminación del moco.",
     nota:"El aceite esencial (anetol) puede ser tóxico en dosis altas. Usar la planta en infusión es seguro.",
@@ -1188,7 +1217,7 @@ const _hierbasFallback = [
   {
     nombre:"Melisa", lat:"Melissa officinalis",
     lote:"Lote VI", loteDesc:"Lote VI · Hierbas femeninas",
-    img:"img/melisa.jpg",
+    img:"/static/img/melisa.jpg",
     props:["Ansiolítica","Antiviral","Digestiva","Sedante","Antiespasmódica"],
     usos:"La planta del corazón tranquilo: combate ansiedad, taquicardias nerviosas y nerviosismo. Antiviral demostrado contra herpes labial (VHS-1). Excelente para digestión nerviosa y colon irritable.",
     nota:"Combina perfecto con valeriana para el insomnio. Las hojas frescas conservan mejor el aroma.",
@@ -1197,7 +1226,7 @@ const _hierbasFallback = [
   {
     nombre:"Equinácea", lat:"Echinacea purpurea",
     lote:"Lote VII", loteDesc:"Lote VII · Hierbas del escudo",
-    img:"img/echinacea.jpg",
+    img:"/static/img/echinacea.jpg",
     props:["Inmunoestimulante","Antiviral","Antibacteriana","Antiinflamatoria","Cicatrizante"],
     usos:"Reduce duración e intensidad de resfríos e infecciones virales. Estimula la producción de glóbulos blancos y la actividad de macrófagos. Ideal en cambios de estación como preventivo.",
     nota:"No usar más de 8 semanas continuas. No recomendada en enfermedades autoinmunes sin supervisión.",
@@ -1206,7 +1235,7 @@ const _hierbasFallback = [
   {
     nombre:"Té Verde", lat:"Camellia sinensis",
     lote:"Lote VII", loteDesc:"Lote VII · Hierbas del escudo",
-    img:"img/te_verde.jpg",
+    img:"/static/img/te_verde.jpg",
     props:["Antioxidante potente","Termogénico","Cardioprotector","Neuroprotector","Anticancerígeno"],
     usos:"Las catequinas (EGCG) neutralizan radicales libres con eficacia 100× superior a la vitamina C. Protege el corazón reduciendo LDL oxidado. La L-teanina produce calma y enfoque sin excitación.",
     nota:"Contiene cafeína. Evitar en embarazo, hipertiroidismo y problemas de sueño en dosis altas.",
@@ -1215,7 +1244,7 @@ const _hierbasFallback = [
   {
     nombre:"Ginkgo Biloba", lat:"Ginkgo biloba",
     lote:"Lote VII", loteDesc:"Lote VII · Hierbas del escudo",
-    img:"img/ginkgo.jpg",
+    img:"/static/img/ginkgo.jpg",
     props:["Vasodilatador","Antioxidante","Neuroprotector","Anticoagulante suave","Nootrópico"],
     usos:"Mejora la microcirculación cerebral, aliviando tinnitus y mareos. Estudios muestran mejora en memoria y deterioro cognitivo leve. El árbol más antiguo del mundo: 270 millones de años de historia medicinal.",
     nota:"Interacción con anticoagulantes (warfarina, aspirina). Consultar al médico si se toman medicamentos.",
@@ -1718,7 +1747,7 @@ function mapearPlanta(p, idx){
     lat:    p.planta_base || '',
     lote:   loteLabel,
     loteDesc: LOTE_DESC[loteNum] || loteLabel,
-    img:    p.imagen ? `img/${p.imagen}` : `img/${normImg(p.nombre_remedio)}.jpg`,
+    img:    p.imagen ? `/static/img/${p.imagen}` : `/static/img/${normImg(p.nombre_remedio)}.jpg`,
     props:  props,
     usos:   p.dosificacion || '',
     nota:   p.contraindicaciones || '',
@@ -2108,7 +2137,7 @@ ul li::before{content:'◆';position:absolute;left:0;color:#b8924a;font-size:4pt
   <button class="btn-print" onclick="window.print()">🖨 Imprimir / Guardar como PDF</button>
 </div>
 <div class="cab">
-  <img class="logo" src="${location.origin}/logo.jpg" alt="logo"/>
+  <img class="logo" src="${location.origin}/static/img/logo.jpg" alt="logo"/>
   <div>
     <p class="cab-linea">Salud Natura · Grimorio de Plantas Medicinales</p>
     <p class="cab-nombre">${h.nombre}</p>
@@ -2118,7 +2147,7 @@ ul li::before{content:'◆';position:absolute;left:0;color:#b8924a;font-size:4pt
 </div>
 <div class="cuerpo">
   <div class="col-foto">
-    <img class="foto" src="${location.origin}/${h.img}" alt="${h.nombre}"/>
+    <img class="foto" src="${location.origin}${h.img}" alt="${h.nombre}"/>
   </div>
   <div class="col-info">
     <h2>Propiedades medicinales</h2>
