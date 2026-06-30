@@ -104,5 +104,48 @@ def init_db():
         )
         conn.commit()
 
+    # Agregar plantas nuevas al grimorio si no existen
+    plantas_nuevas = [
+        ('Sauce Blanco', 'Salix alba', 'Analgésica, Antiinflamatoria, Antipirética, Anticoagulante suave', 'Evitar con alergia a aspirina, anticoagulantes o úlcera gástrica', 'Decocción: 1 cucharadita de corteza seca en 300 ml de agua 10 min. 2-3 tazas al día', None, None),
+        ('Árnica', 'Arnica montana', 'Antiinflamatoria, Analgésica tópica, Cicatrizante, Antihematoma', 'Solo uso externo. Nunca ingerir ni aplicar en piel abierta o mucosas', 'Infusión concentrada externa: 2 cdas de flores en 200 ml agua. Compresa 20 min x 3 veces al día', None, None),
+        ('Harpagofito', 'Harpagophytum procumbens', 'Antiinflamatoria, Analgésica articular, Antirreumática', 'No usar con úlcera gástrica, embarazo o antihipertensivos sin consulta médica', 'Decocción: 1 cda de raíz triturada en 250 ml agua 10 min. 2 veces al día por 4 semanas mínimo', None, None),
+        ('Cardo Mariano', 'Silybum marianum', 'Hepatoprotectora, Regeneradora hepática, Antiespasmódica, Antiinflamatoria', 'Puede causar efecto laxante leve. Consultar en embarazo', 'Infusión de semillas trituradas en 250 ml agua caliente 10 min. 3 tazas al día', None, None),
+        ('Malvavisco', 'Althaea officinalis', 'Emoliente, Mucilaginosa, Antiinflamatoria, Expectorante, Protectora mucosas', 'Puede interferir con absorción de otros medicamentos. Tomar separado de fármacos', 'Maceración fría: 1 cda de raíz en 200 ml agua fría 8 horas. No hervir. Antes de comidas', None, None),
+        ('Hinojo', 'Foeniculum vulgare', 'Carminativa, Digestiva, Antiespasmódica, Galactogoga, Expectorante', 'Evitar en embarazo en dosis altas. No usar aceite esencial en niños pequeños', 'Infusión: 1 cda de semillas machacadas en 250 ml agua caliente 6-7 min. Después de las comidas', None, None),
+        ('Saúco', 'Sambucus nigra', 'Antiviral, Inmunoestimulante, Diaforética, Expectorante, Antifebril', 'No consumir bayas, hojas o corteza crudas. Solo flores o bayas maduras cocidas', 'Infusión: 2 cdas de flores secas en 350 ml agua caliente 10 min. 3 tazas al día', None, None),
+        ('Tilo', 'Tilia europaea', 'Sedante suave, Antiespasmódica, Diaforética, Hipotensora suave, Antitusígena', 'No usar en menores de 3 años. Evitar uso prolongado sin supervisión', 'Infusión: 2 cdas de flores en 300 ml agua caliente 10 min tapado. 3 tazas al día', None, None),
+        ('Eleuterococo', 'Eleutherococcus senticosus', 'Adaptógena, Inmunoestimulante, Antifatiga, Nootrópica, Antiestrés', 'Evitar con hipertensión grave, embarazo o insomnio. Ciclos de 3 semanas', 'Decocción: 1 cdita de raíz seca en 300 ml agua 15 min. En ayunas por la mañana', None, None),
+        ('Hierba de San Juan', 'Hypericum perforatum', 'Antidepresiva suave, Ansiolítica, Antiinflamatoria, Antiviral, Cicatrizante', 'No combinar con antidepresivos, anticonceptivos, anticoagulantes ni antivirales. Fotosensibilizante', 'Infusión: 1 cda de flores secas en 250 ml agua caliente 10 min. 3 tazas al día por 4-6 semanas', None, None),
+        ('Aloe Vera', 'Aloe barbadensis', 'Cicatrizante, Hidratante, Antiinflamatoria, Antiséptica, Inmunomoduladora', 'Solo gel transparente de uso tópico. La parte látex amarilla es laxante y no se debe ingerir', 'Gel directo de hoja fresca sobre piel. Renovar 3-4 veces al día', None, None),
+        ('Llantén', 'Plantago major', 'Antihistamínica, Antiinflamatoria, Expectorante, Antimicrobiana, Cicatrizante', 'Puede causar reacciones alérgicas en personas sensibles al polen', 'Hoja fresca estrujada aplicada directamente. O infusión 1 cda en 250 ml agua 10 min', None, None),
+        ('Arándano Rojo', 'Vaccinium macrocarpon', 'Antiséptica urinaria, Antiadherente bacteriano, Antioxidante, Antiinflamatoria', 'Preventivo y coadyuvante, no reemplaza antibióticos en infección activa', 'Zumo sin azúcar 200 ml x 3 veces al día. O infusión de hojas secas 10 min', None, None),
+        ('Olivo', 'Olea europaea', 'Hipotensora, Hipoglucemiante, Antioxidante, Antiinflamatoria, Cardioprotectora', 'Complemento natural. No suspender medicación antihipertensiva sin supervisión médica', 'Infusión: 10-15 hojas secas en 300 ml agua caliente 10-15 min. 2-3 tazas al día', None, None),
+        ('Ajo', 'Allium sativum', 'Hipocolesterolemiante, Antimicrobiana, Antifúngica, Antiviral, Cardioprotectora, Hipotensora', 'Puede potenciar anticoagulantes. Evitar en dosis altas con anticoagulantes o preoperatorio', '1-2 dientes crudos en ayunas. O infusión de ajo machacado en agua templada 5 min', None, None),
+    ]
+    for nombre, planta_base, propiedades, contraindicaciones, dosificacion, link, imagen in plantas_nuevas:
+        existe = conn.execute("SELECT id_remedio FROM base_conocimiento_salud WHERE nombre_remedio=?", (nombre,)).fetchone()
+        if not existe:
+            conn.execute(
+                "INSERT INTO base_conocimiento_salud (nombre_remedio, planta_base, propiedades, contraindicaciones, dosificacion, link_articulo_web, imagen_url) VALUES (?,?,?,?,?,?,?)",
+                (nombre, planta_base, propiedades, contraindicaciones, dosificacion, link, imagen)
+            )
+    conn.commit()
+
+    # Agregar columna id_remedio a botiquin si no existe
+    try:
+        conn.execute("ALTER TABLE botiquin ADD COLUMN id_remedio INTEGER REFERENCES base_conocimiento_salud(id_remedio)")
+        conn.commit()
+    except:
+        pass
+
+    # Vincular botiquin con base_conocimiento_salud por nombre de planta
+    conn.execute("""
+        UPDATE botiquin SET id_remedio = (
+            SELECT id_remedio FROM base_conocimiento_salud
+            WHERE nombre_remedio = botiquin.planta
+        ) WHERE id_remedio IS NULL
+    """)
+    conn.commit()
+
     conn.commit()
     conn.close()
