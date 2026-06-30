@@ -893,10 +893,10 @@ html,body{height:100%;font-family:'Lato',sans-serif;background:var(--verde);over
 
           <hr class="idx-divider">
 
-          <p class="idx-field-label">Buscar por nombre de planta</p>
+          <p class="idx-field-label">Buscar plantas, propiedades o síntomas</p>
           <div class="idx-search-box">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#b8924a" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" id="idxSearch" placeholder="Escribe una planta…" oninput="idxBuscar()">
+            <input type="text" id="idxSearch" placeholder="Ej: ansiedad, antiinflamatorio…" oninput="idxBuscar()">
           </div>
 
           <hr class="idx-divider">
@@ -1476,16 +1476,23 @@ function idxInit(){
 function norm(s){ return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''); }
 
 function idxBuscar(){
-  const q = norm(document.getElementById('idxSearch').value.trim());
+  const raw = document.getElementById('idxSearch').value.trim();
   document.getElementById('idxSelDolencia').value = '';
   document.getElementById('idxPlantWrap').classList.remove('visible');
-  if(!q){ idxRenderLista(hierbas,'Todas las plantas'); return; }
-  const res = hierbas.filter(h=>
-    norm(h.nombre).includes(q)||
-    h.dolencias.some(d=>norm(d).includes(q))||
-    h.props.some(p=>norm(p).includes(q))
-  );
-  idxRenderLista(res, res.length ? `Resultados para "${document.getElementById('idxSearch').value.trim()}"` : 'Sin resultados');
+  if(!raw){ idxRenderLista(hierbas,'Todas las plantas'); return; }
+  fetch(`/api/remedios/buscar?q=${encodeURIComponent(raw)}`)
+    .then(r=>r.json())
+    .then(json=>{
+      if(!json.ok){ idxRenderLista([],'Sin resultados'); return; }
+      const nombres = json.data.map(r=>norm(r.nombre_remedio));
+      const res = hierbas.filter(h=>nombres.includes(norm(h.nombre)));
+      idxRenderLista(res, res.length ? `🔍 ${res.length} resultado${res.length>1?'s':''} para "${raw}"` : `Sin resultados para "${raw}"`);
+    })
+    .catch(()=>{
+      const q = norm(raw);
+      const res = hierbas.filter(h=>norm(h.nombre).includes(q)||h.props.some(p=>norm(p).includes(q)));
+      idxRenderLista(res, res.length ? `🔍 ${res.length} resultado${res.length>1?'s':''} para "${raw}"` : `Sin resultados para "${raw}"`);
+    });
 }
 
 function idxSeleccionarDolencia(){
