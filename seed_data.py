@@ -1,4 +1,5 @@
 """
+Ahora son 22 hierbas agregué una
 Seed inicial: carga las 21 hierbas del Grimorio en la base de datos.
 Ejecutar: python seed_data.py
 """
@@ -30,7 +31,7 @@ conn.execute('''CREATE TABLE IF NOT EXISTS usuarios_y_clientes (
 
 # nombre_remedio: sin tildes para que nombreToImg() del grimorio genere la URL correcta
 hierbas = [
-     ('Manzanilla verde y amarilla',   'Matricaria chamomilla',   'Antiinflamatoria,Sedante suave,Digestiva,Antibacteriana,Antiespasmódica',
+     ('Manzanilla verde y amarilla',   'Matricaria chamomilla 1',   'Antiinflamatoria,Sedante suave,Digestiva,Antibacteriana,Antiespasmódica',
      'La infusión debe reposar tapada 10 min para conservar sus aceites esenciales.',
      'Alivia insomnio y nerviosismo, calma cólicos y gastritis. En piel reduce rojeces e irritaciones.'),
     ('Manzanilla',   'Matricaria chamomilla',   'Antiinflamatoria,Sedante suave,Digestiva,Antibacteriana,Antiespasmódica',
