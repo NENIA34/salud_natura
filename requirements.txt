@@ -10,6 +10,7 @@ email-validator>=2.0
 # ── Auth ──
 sqlalchemy[asyncio]>=2.0
 aiosqlite
+asyncpg  # Para PostgreSQL en producción
 passlib[bcrypt]>=1.7
 bcrypt<5.0  # bcrypt 5.0 rompe con passwords >72 bytes
 python-jose[cryptography]>=3.3
