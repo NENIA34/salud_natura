@@ -155,6 +155,14 @@ async def crear_remedio(remedio: RemedioIn):
     return {"ok": True, "id_remedio": id_nuevo}
 
 
+@app.get("/api/usuarios")
+async def listar_usuarios():
+    conn = get_db()
+    rows = [dict(r) for r in conn.execute("SELECT * FROM usuarios_y_clientes ORDER BY id_usuario").fetchall()]
+    conn.close()
+    return {"ok": True, "data": rows}
+
+
 @app.post("/api/usuarios")
 async def registrar_usuario(usuario: UsuarioIn):
     conn = get_db()
