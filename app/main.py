@@ -21,6 +21,7 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(title=settings.app_name, lifespan=lifespan)
+app.mount("/tutorial", StaticFiles(directory="tutorial", html=True), name="tutorial")
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
 
@@ -60,6 +61,14 @@ async def newsletter(request: Request):
 @app.get("/taller")
 async def taller(request: Request):
     return templates.TemplateResponse("taller.html", {
+        "request": request,
+        "settings": settings,
+    })
+
+
+@app.get("/tutorial")
+async def tutorial(request: Request):
+    return templates.TemplateResponse("tutorial.html", {
         "request": request,
         "settings": settings,
     })
