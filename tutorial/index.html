@@ -4,82 +4,76 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Taller de Páginas Web con IA</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+<header>
     <h1>Taller de Páginas Web con IA</h1>
+    <p>Construí tu primera página web paso a paso</p>
+</header>
 
-    <h2>Cómo trabajamos</h2>
+<main>
 
-    <p>En este taller el docente trabaja con una IA que se llama Claude Code.</p>
+    <section>
+        <h2>Cómo trabajamos</h2>
+        <p>En este taller el docente trabaja con una IA que se llama Claude Code.</p>
+        <p>Claude Code no es el Claude del navegador. Es una versión especial que tiene acceso a la computadora del docente. Puede crear carpetas, crear archivos, instalar cosas, y subir código a internet. Todo en tiempo real.</p>
+        <p>Cuando el docente le da una instrucción — por ejemplo "creá un archivo HTML" — Claude Code lo crea, lo sube al servidor, y en segundos aparece en esta página.</p>
+        <p>Eso que van a ver hoy es exactamente cómo trabaja un desarrollador profesional.</p>
+    </section>
 
-    <p>Claude Code no es el Claude del navegador. Es una versión especial que tiene acceso a la computadora del docente. Puede crear carpetas, crear archivos, instalar cosas, y subir código a internet. Todo en tiempo real.</p>
+    <section>
+        <h2>Cómo enviamos mails desde Claude Code</h2>
+        <p>Claude Code puede enviar mails desde Gmail directamente desde el código, usando Python. No abre el navegador — se conecta a Gmail con una clave especial.</p>
+        <p>Esa clave se llama <strong>contraseña de aplicación</strong>. No es tu contraseña normal de Gmail. Es una clave de 16 caracteres que Google genera específicamente para que programas externos puedan enviar mails en tu nombre.</p>
+        <p>Para obtenerla hay que ir a:</p>
+        <p><a href="https://myaccount.google.com/apppasswords">https://myaccount.google.com/apppasswords</a></p>
+        <p>Requisito: la cuenta de Google tiene que tener activada la verificación en dos pasos.</p>
+        <p>Una vez obtenida, la clave se guarda en un archivo llamado <strong>.env</strong> en la computadora. Ese archivo nunca se sube a internet — está protegido por el <strong>.gitignore</strong>.</p>
+    </section>
 
-    <p>Cuando el docente le da una instrucción — por ejemplo "creá un archivo HTML" — Claude Code lo crea, lo sube al servidor, y en segundos aparece en esta página.</p>
+    <section>
+        <h2>Cómo interactuar con Git</h2>
+        <p>Git es el sistema que guarda el historial de cambios del proyecto. Cada vez que modificamos un archivo, Git puede registrar ese cambio con un mensaje que explica qué se hizo.</p>
+        <p>Desde Claude Code, Git se usa con tres comandos principales:</p>
+        <p><strong>1. git add</strong> — le decís a Git qué archivos querés guardar</p>
+        <p><strong>2. git commit</strong> — guardás los cambios con un mensaje descriptivo</p>
+        <p><strong>3. git push</strong> — subís los cambios a GitHub, y desde ahí se despliegan automáticamente al servidor</p>
+        <p>En este taller, cada vez que el docente dice "subilo", Claude Code ejecuta esos tres comandos y en segundos el cambio aparece en la página que están viendo.</p>
+    </section>
 
-    <p>Eso que van a ver hoy es exactamente cómo trabaja un desarrollador profesional.</p>
+    <section>
+        <h2>¿Cómo puede Claude Code hacer push a GitHub?</h2>
+        <p>Para que Claude Code pueda subir cambios a GitHub, necesita tener permiso. Ese permiso se configura una sola vez en la computadora del docente.</p>
+        <p>La forma más común es usando <strong>GitHub CLI</strong> — una herramienta que se instala en la computadora y se autentica con tu cuenta de GitHub. Una vez autenticada, Git sabe que tiene permiso para subir cambios a tus repositorios sin pedir contraseña cada vez.</p>
+        <p><strong>1.</strong> Instalás GitHub CLI una sola vez</p>
+        <p><strong>2.</strong> Ejecutás <strong>gh auth login</strong> y seguís los pasos para autenticarte con tu cuenta</p>
+        <p><strong>3.</strong> Desde ese momento, Claude Code puede hacer push a tus repos directamente</p>
+        <p>Es como darle una llave a alguien de confianza. Una vez que la tiene, puede entrar cuando necesite — sin que vos tengas que abrir la puerta cada vez.</p>
+    </section>
 
+    <section>
+        <h2>Paso 1 — Tu primera página HTML</h2>
+        <p>Copiá este prompt y pegalo en tu IA:</p>
+        <blockquote>
+            "Creá un archivo HTML con tu nombre, el nombre de tu proyecto y una frase que lo describa. Sin CSS, sin JavaScript. Solo HTML básico. Explicame qué hace cada línea."
+        </blockquote>
+    </section>
 
-    <h2>Cómo enviamos mails desde Claude Code</h2>
+    <section>
+        <h2>Colaboradores</h2>
+        <ul>
+            <li><a href="Ariel/">Ariel</a></li>
+            <li><a href="Agustina%20DG/">Agustina DG</a></li>
+        </ul>
+    </section>
 
-    <p>Claude Code puede enviar mails desde Gmail directamente desde el código, usando Python. No abre el navegador — se conecta a Gmail con una clave especial.</p>
+</main>
 
-    <p>Esa clave se llama <strong>contraseña de aplicación</strong>. No es tu contraseña normal de Gmail. Es una clave de 16 caracteres que Google genera específicamente para que programas externos puedan enviar mails en tu nombre.</p>
-
-    <p>Para obtenerla hay que ir a:</p>
-
-    <p><a href="https://myaccount.google.com/apppasswords">https://myaccount.google.com/apppasswords</a></p>
-
-    <p>Requisito: la cuenta de Google tiene que tener activada la verificación en dos pasos.</p>
-
-    <p>Una vez obtenida, la clave se guarda en un archivo llamado <strong>.env</strong> en la computadora. Ese archivo nunca se sube a internet — está protegido por el <strong>.gitignore</strong>.</p>
-
-
-    <h2>Cómo interactuar con Git</h2>
-
-    <p>Git es el sistema que guarda el historial de cambios del proyecto. Cada vez que modificamos un archivo, Git puede registrar ese cambio con un mensaje que explica qué se hizo.</p>
-
-    <p>Desde Claude Code, Git se usa con tres comandos principales:</p>
-
-    <p><strong>1. git add</strong> — le decís a Git qué archivos querés guardar</p>
-    <p><strong>2. git commit</strong> — guardás los cambios con un mensaje descriptivo</p>
-    <p><strong>3. git push</strong> — subís los cambios a GitHub, y desde ahí se despliegan automáticamente al servidor</p>
-
-    <p>En este taller, cada vez que el docente dice "subilo", Claude Code ejecuta esos tres comandos y en segundos el cambio aparece en la página que están viendo.</p>
-
-    <p>No hace falta escribir los comandos a mano. Claude Code los ejecuta solo cuando recibe la instrucción.</p>
-
-
-    <h2>¿Cómo puede Claude Code hacer push a GitHub?</h2>
-
-    <p>Para que Claude Code pueda subir cambios a GitHub, necesita tener permiso. Ese permiso se configura una sola vez en la computadora del docente.</p>
-
-    <p>La forma más común es usando <strong>GitHub CLI</strong> — una herramienta que se instala en la computadora y se autentica con tu cuenta de GitHub. Una vez autenticada, Git sabe que tiene permiso para subir cambios a tus repositorios sin pedir contraseña cada vez.</p>
-
-    <p>El proceso es:</p>
-
-    <p><strong>1.</strong> Instalás GitHub CLI una sola vez</p>
-    <p><strong>2.</strong> Ejecutás <strong>gh auth login</strong> y seguís los pasos para autenticarte con tu cuenta</p>
-    <p><strong>3.</strong> Desde ese momento, Claude Code puede hacer push a tus repos directamente</p>
-
-    <p>Es como darle una llave a alguien de confianza. Una vez que la tiene, puede entrar cuando necesite — sin que vos tengas que abrir la puerta cada vez.</p>
-
-
-    <h2>Paso 1 — Tu primera página HTML</h2>
-
-    <p>Copiá este prompt y pegalo en tu IA:</p>
-
-    <blockquote>
-        "Creá un archivo HTML con tu nombre, el nombre de tu proyecto y una frase que lo describa. Sin CSS, sin JavaScript. Solo HTML básico. Explicame qué hace cada línea."
-    </blockquote>
-
-
-    <h2>Colaboradores</h2>
-
-    <ul>
-        <li><a href="Ariel/">Ariel</a></li>
-        <li><a href="Agustina%20DG/">Agustina DG</a></li>
-    </ul>
+<footer>
+    <p>Centro de Graduados de Ingeniería</p>
+</footer>
 
 </body>
 </html>
