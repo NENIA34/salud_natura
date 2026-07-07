@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vendedores — Salud Natura</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" fill="#2a8f57"/><path d="M8 12c1.333-2 6-2 7 0" stroke="white" stroke-width="1.2" stroke-linecap="round"/></svg>
+      Salud Natura — Vendedores
+    </div>
+    <nav>
+      <a class="btn" href="#contacto">Contactar</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <div style="flex:1">
+        <h1>Bienvenido, vendedor de Salud Natura</h1>
+        <p style="margin:0;color:var(--muted)">Herramientas, pedidos y materiales para ayudarte a vender nuestros productos naturales con confianza.</p>
+        <div style="margin-top:12px">
+          <a class="btn" href="#recursos">Ver recursos</a>
+        </div>
+      </div>
+      <div style="width:260px;text-align:center">
+        <img class="product" src="assets/img/product.svg" alt="Productos Salud Natura">
+      </div>
+    </section>
+
+    <div class="grid">
+      <div>
+        <div class="card">
+          <h3>Beneficios para vendedores</h3>
+          <ul class="features">
+            <li>Descuentos por volumen y condiciones especiales.</li>
+            <li>Materiales de venta descargables: catálogos y folletos.</li>
+            <li>Capacitaciones periódicas y soporte comercial.</li>
+          </ul>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <h3 id="recursos">Recursos y catálogos</h3>
+          <p style="color:var(--muted);margin:6px 0">Descarga folletos, listas de precios y materiales gráficos para tus canales de venta.</p>
+          <ul class="features">
+            <li>Catálogo de productos (PDF)</li>
+            <li>Imágenes de producto en alta resolución</li>
+            <li>Guía rápida de argumentos de venta</li>
+          </ul>
+          <div style="margin-top:12px">
+            <a class="btn" href="#">Descargar paquete</a>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <h3>Cómo realizar pedidos</h3>
+          <ol style="margin:8px 0;color:var(--muted);padding-left:18px">
+            <li>Inicia sesión en el portal de vendedores.</li>
+            <li>Selecciona productos y cantidades.</li>
+            <li>Confirma y coordina entrega con el equipo.</li>
+          </ol>
+        </div>
+      </div>
+
+      <aside>
+        <div class="card">
+          <h4>Contacto rápido</h4>
+          <p style="color:var(--muted);margin:6px 0">¿Dudas o necesitas asistencia comercial? Escríbenos.</p>
+          <form id="contacto" action="#" method="post">
+            <label for="nombre">Nombre</label>
+            <input id="nombre" name="nombre" required>
+            <label for="email">Correo electrónico</label>
+            <input id="email" name="email" type="email" required>
+            <label for="telefono">Teléfono</label>
+            <input id="telefono" name="telefono">
+            <label for="mensaje">Mensaje</label>
+            <textarea id="mensaje" name="mensaje" rows="4"></textarea>
+            <button type="submit" class="btn" style="width:100%;margin-top:12px">Enviar</button>
+          </form>
+        </div>
+
+        <div class="card" style="margin-top:14px">
+          <h4>Acceso</h4>
+          <p style="color:var(--muted);margin:6px 0">Si aún no tienes usuario, solicita registro al equipo comercial.</p>
+          <a class="btn" href="#">Solicitar usuario</a>
+        </div>
+      </aside>
+    </div>
+
+    <footer>
+      © Salud Natura — Soporte a vendedores • contacto@saludnatura.example
+    </footer>
+  </main>
+</body>
+</html>
